@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+<meta charset=utf-8>
+    <title>BookKarts</title>
+</head>
+  <body>
+
+    <table>
+    <tr><td><input id="gname" type = "text" name="name" placeholder="Enter the genre" pattern="[A-Za-z]+"></td></tr>
+
+    <tr><td><input type ="submit" value ="submit" onsubmit="deleteUser()"></td></tr>
+    </table>
+
+<form method="post" action="" id="the-form">
+<table>
+    <tr><td><input type = "text" name="name" placeholder="Enter the id" pattern="[0-9]+"></td></tr>
+    <tr><td><input type = "text" name="g_id" placeholder="Enter the genre" pattern="[A-Za-z]+"></td></tr>
+
+    <tr><td><input type ="submit" value ="submit" onsubmit="saveUser()"></td></tr>
+    </table>
+
+
+</form>
+
+
+
+<script>
+ function saveUser(){
+       
+       $.ajax({
+        window.alert("hii");
+        url:"/api/genre",
+        type:"post",
+        data:$("#the-form").serialize(),
+        success:function(res){
+            
+            console.log(xhr.responseText);
+            var err = '';
+            $.each(JSON.parse(xhr.responseText) , function(i, item) {
+               
+                 err +='<li>'+item.msg+'</li>';
+            });
+            $(".err-area").html(err);    
+            return false;
+        }
+        
+       });
+    }
+
+    
+
+  </script>

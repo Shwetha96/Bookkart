@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+        <style>
+  h1{
+    color:black;
+    font-size:70px;
+    font-style:italic;
+    text-align:center;
+  }
+    table{
+        border:3px solid;
+        width:800px;
+        height:600px;
+        text-align:center;
+       font-size:30px;
+        
+        color:black;
+        margin-left:180px;
+    }
+  
+   body{
+     
+      background-color:#FFFFFF;
+    }
+    
+  </style>
+    </head>
+<body >
+  <h1>EDIT BOOK DETAILS</h1>
+<form method="post" action="" id="the-form">
+    <table cellpadding="11">
+        <tr>
+        <td class="label">Book ID</td><td>: <input type="text" name="book_id" value="<%=data[0].book_id%>"></td>
+     </tr>
+    <tr>
+        <td class="label">Book Name</td><td>: <input type="text" name="title" value="<%=data[0].title%>"></td>
+     </tr>
+    <tr>
+        <td class="label">Book Genre</td><td>: <input type="text" name="genre" value="<%=data[0].genre%>"></td>
+     </tr>
+      <tr>
+        <td class="label">Cost</td><td>: <input type="text" name="cost" value="<%=data[0].cost%>"></td>
+     </tr>
+     <tr>
+        <td class="label">Copies</td><td>: <input type="text" name="no_of_copies" value="<%=data[0].no_of_copies%>"></td>
+
+     </tr>
+      <tr>
+        <td class="label">Description</td><td>: <input type="text" name="description" value="<%=data[0].description%>"></td>
+        
+     </tr>
+     <tr>
+        <td class="label"></td>
+        <td>
+            &nbsp; <input type="button" value="Save" onClick="saveUser()">
+        </td>
+     </tr>
+    </table>
+</form>
+ <script>
+    
+        function saveUser(){
+           
+           $.ajax({
+           
+            url:"/api/books/"+<%=data[0].book_id%>,
+            type:"put",
+            data:$("#the-form").serialize(),
+            success:function(res){
+               
+                window.location.href = '/api/books';
+                return false;
+            },
+            error:function(xhr, status, error){
+                
+                console.log(xhr.responseText);
+                var err = '';
+                $.each(JSON.parse(xhr.responseText) , function(i, item) {
+                   
+                     err +='<li>'+item.msg+'</li>';
+                });
+                $(".err-area").html(err);    
+                return false;
+            }
+            
+           });
+        }
+    
+    </script>
+</body>
+</html>

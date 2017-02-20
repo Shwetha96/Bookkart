@@ -1,0 +1,44 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+<meta charset=utf-8>
+    <title>BookKarts</title>
+</head>
+  <body>
+<form method="" action="" id="the-form">
+<table>
+    <tr><td><input id="gname" type = "text" name="name" placeholder="Enter the genre" pattern="[A-Za-z]+"></td></tr>
+
+    <tr><td><input type ="submit" value ="submit" onsubmit="deleteUser()"></td></tr>
+    </table>
+
+
+</form>
+
+<script>
+ function deleteUser(){
+
+  var gname=document.getElementById("gname")
+  var gname=gname.value;
+        $.ajax({
+            url:"/api/genre/"+gname,
+            type: 'DELETE',
+            success: function(res) {
+                
+                window.location.reload();
+                return false;
+            },
+            error:function(xhr, status, error){
+            
+                console.log(xhr.responseText);
+                alert("Error deleting");
+                return false;
+            }
+        });
+    }
+
+  </script>

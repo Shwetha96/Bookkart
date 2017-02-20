@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title><%=title%></title>
+        <script type="text/javascript" src="/../js/jquery-1.10.2.min.js"></script>
+        <link rel="stylesheet" href="/../css/style.css">
+        <style>
+  h1{
+    color:black;
+    font-size:70px;
+    text-align:center;
+    font-style:italic;
+  }
+    table{
+      border:3px solid;
+      width:800px;
+      height:600px;
+      color:black;
+      text-align:center;
+      font-size:30px;
+      
+      
+      margin-left:180px;
+    }
+  
+   body{
+     
+      background-color:#FFFFFF;
+    }
+  
+  </style>
+    </head>
+<body>
+  <h1>BookKarts</h1>
+  <h3><center>BOOKS AVAILBALE</center></h3>
+<div class="data-table">
+    <table border="1" cellpadding="7" cellspacing="7">
+        <tr>
+            <th width="50px">BOOK ID</th>
+            <th>BOOK NAME </th>
+            <th>GENRE  </th>
+            <th>COST(IN RS) </th>
+            <th>COPIES</th>
+            <th>DESCRIPTION</th>
+        </tr>
+                       
+        <% if(data.length){ 
+                        
+         for(var i = 0;i < data.length;i++) { %>
+         
+        <tr>
+           
+            <td><%=data[i].book_id%></td>
+            <td><%=data[i].title%></td>
+            <td><%=data[i].genre%></td>
+            <td><%=data[i].cost%></td>
+            <td><%=data[i].no_of_copies%></td>
+            <td><%=data[i].description%></td>
+           <td>
+                <a class="a-inside edit" href="/api/books/<%=data[i].book_id%>">Edit</a>
+               
+                <a class="a-inside delete" href="javascript:void(0)" onClick="deleteUser(<%=data[i].book_id%>)">Sell Book</a>
+               
+            </td>
+        </tr>
+    <% }
+    
+     }else{ %>
+         <tr>
+            <td colspan="5">No Data</td>
+         </tr>
+    <% } %>
+                                      
+    </table>
+</div>
+<div class="page-data">
+    <h2><center>ADD BOOK</h2>
+    <form method="post" action="" id="the-form">
+        <table cellpadding="11">
+         <tr>
+        <td class="label">Book ID</td><td>: <input type="text" name="book_id" value="<%=data[0].book_id%>"></td>
+     </tr>
+    <tr>
+        <td class="label">Book Name</td><td>: <input type="text" name="title" value="<%=data[0].title%>"></td>
+     </tr>
+    <tr>
+        <td class="label">Book Genre</td><td>: <input type="text" name="genre" value="<%=data[0].genre%>"></td>
+     </tr>
+      <tr>
+        <td class="label">Cost</td><td>: <input type="text" name="cost" value="<%=data[0].cost%>"></td>
+     </tr>
+     <tr>
+        <td class="label">Copies</td><td>: <input type="text" name="no_of_copies" value="<%=data[0].no_of_copies%>"></td>
+
+     </tr>
+      <tr>
+        <td class="label">Description</td><td>: <input type="text" name="description" value="<%=data[0].description%>"></td>
+        
+     </tr>
+         <tr>
+            <td class="label"></td>
+            <td>
+                &nbsp; <input type="button" value="Save" onClick="saveUser()">
+            </td>
+         </tr>
+        </table>
+    </form>
+</div>
+<div style="float:right;">
+      <a  href="/api/genre"> See Genre</a>
+</div>
+<div class="page-data">
+     <ul class="err-area"></ul>
+</div>
+
+<script>
+
+    function saveUser(){
+       
+       $.ajax({
+        
+        url:"/api/books",
+        type:"post",
+        data:$("#the-form").serialize(),
+        success:function(res){
+            
+            window.location.reload();
+            return false;
+        },
+        error:function(xhr, status, error){
+            
+            console.log(xhr.responseText);
+            var err = '';
+            $.each(JSON.parse(xhr.responseText) , function(i, item) {
+               
+                 err +='<li>'+item.msg+'</li>';
+            });
+            $(".err-area").html(err);    
+            return false;
+        }
+        
+       });
+    }
+    
+    function deleteUser(book_id){
+    
+        /*$.ajax({
+            url:"/api/books/"+book_id,
+            type: 'put',
+            success: function(res) {
+                
+                window.location.reload();
+                return false;
+            },
+            error:function(xhr, status, error){
+            
+                console.log(xhr.responseText);
+                alert("Error deleting");
+                return false;
+            }
+        });*/
+
+  $.ajax({
+           
+            url:"/api/books/"+book_id,
+            type:"put",
+            data:book_id,
+            success:function(res){
+               
+                window.location.reload();
+                return false;
+            },
+            error:function(xhr, status, error){
+                
+                console.log(xhr.responseText);
+                var err = '';
+                $.each(JSON.parse(xhr.responseText) , function(i, item) {
+                   
+                     err +='<li>'+item.msg+'</li>';
+                });
+                $(".err-area").html(err);    
+                return false;
+            }
+            
+           });
+    }
+
+</script>
+</body>
+</html>
